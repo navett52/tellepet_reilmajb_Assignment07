@@ -1,5 +1,7 @@
-﻿using System;
+﻿using ds_ProductsTableAdapters;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -11,13 +13,21 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
+            //Populating the Transaction Type drop down using the databse.
             tProductTableAdapter productTypeAdapter = new tProductTableAdapter();
 
-            //Populating the Transaction Type drop down using the databse.
             ds_Products.tProductDataTable products = productTypeAdapter.GetData();
-            ddProducts.DataTextField = "TransactionType";
-            ddProducts.DataValueField = "TransactionTypeID";
-            ddProducts.DataSource = products;
+
+            List<string> productData = new List<string>();
+            foreach (DataRow dataRow in products.Rows)
+            {
+                productData.Add(dataRow["Manufacturer"].ToString() + " : " + dataRow["Name"].ToString() + "- " + dataRow["Description"].ToString());
+            }
+            ddProducts.DataSource = productData;
+
+            //ddProducts.DataTextField = "Name";
+            ddProducts.DataValueField = "ProductID";
+            //ddProducts.DataSource = products;
             ddProducts.DataBind();
         }
     }
