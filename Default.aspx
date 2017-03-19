@@ -6,12 +6,20 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="cphBody" Runat="Server">
     <div>
-        <asp:Calendar ID="calStartDate" runat="server"></asp:Calendar>
-        <asp:Calendar ID="calEndDate" runat="server"></asp:Calendar>
-        <asp:TextBox ID="txtMinQty" runat="server"></asp:TextBox>
-        <asp:TextBox ID="txtMaxQty" runat="server"></asp:TextBox>
-        <asp:DropDownList ID="ddProducts" runat="server"></asp:DropDownList>
-        <asp:CheckBoxList ID="cblStores" runat="server"></asp:CheckBoxList>
+        <asp:Table ID="Table1" runat="server" Height="500px" Width="700px" >
+            <asp:TableRow runat="server">
+                <asp:TableCell runat="server"><asp:Calendar ID="calStartDate" runat="server"></asp:Calendar></asp:TableCell>
+                <asp:TableCell runat="server"><asp:Calendar ID="calEndDate" runat="server"></asp:Calendar></asp:TableCell>
+            </asp:TableRow>
+            <asp:TableRow runat="server">
+                <asp:TableCell runat="server">Minimum Quantity Sold <br /><asp:TextBox ID="txtMinQty" runat="server"></asp:TextBox></asp:TableCell>
+                <asp:TableCell runat="server">Maximum Quantity Sold <br /><asp:TextBox ID="txtMaxQty" runat="server"></asp:TextBox></asp:TableCell>
+            </asp:TableRow>
+            <asp:TableRow runat="server">
+                <asp:TableCell runat="server">Pick the Product<br /><asp:DropDownList ID="ddProducts" runat="server"></asp:DropDownList></asp:TableCell>
+                <asp:TableCell runat="server">Pick the store(s)<br /><asp:CheckBoxList ID="cblStores" runat="server"></asp:CheckBoxList></asp:TableCell>
+            </asp:TableRow>
+        </asp:Table>
         <asp:Button ID="btnGenerate" runat="server" Text="Generate" OnClick="btnGenerate_Click" />
     </div>
 </asp:Content>
