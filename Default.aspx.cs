@@ -13,21 +13,25 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
-            //Populating the Transaction Type drop down using the databse.
+            //Populating the Product dropdown.
             tProductTableAdapter productTypeAdapter = new tProductTableAdapter();
-
             ds_Products.tProductDataTable products = productTypeAdapter.GetData();
-
-            List<string> productData = new List<string>();
-            foreach (DataRow dataRow in products.Rows)
-            {
-                productData.Add(dataRow["Manufacturer"].ToString() + " : " + dataRow["Name"].ToString() + "- " + dataRow["Description"].ToString());
-            }
+            /*
+             * Ref for below code: http://stackoverflow.com/questions/1143639/binding-multiple-fields-to-listbox-in-asp-net/
+             * In all honesty not entirely sure how this works...
+             * Is this kinda like a Lambda Function?
+             */
+            EnumerableRowCollection productData = from product in products
+                             select new
+                             {
+                                 Name = product.Name + " - " + product.Description + " :by " + product.Manufacturer,
+                                 Id = product.ProductID
+                             };
+            //end code I don't fully understand
+            //The rest is just normal data binding.
             ddProducts.DataSource = productData;
-
-            //ddProducts.DataTextField = "Name";
-            ddProducts.DataValueField = "ProductID";
-            //ddProducts.DataSource = products;
+            ddProducts.DataTextField = "Name";
+            ddProducts.DataValueField = "Id";
             ddProducts.DataBind();
         }
     }

@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/tellepet_reilmajb_Assignment07/Assn07Master.master" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="tellepet_reilmajb_Assignment07_Default" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Assn07Master.master" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="tellepet_reilmajb_Assignment07_Default" %>
 
 
 
