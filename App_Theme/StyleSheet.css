@@ -12,12 +12,16 @@ h1 {
 }
 
 #wrapper {
+    border: 2px solid black;
     width: 80%;
     margin: auto;
 }
 
 #storeList {
-    max-height: 500px;
-    max-width: 250px;
+    background-color: white;
+    max-height: 150px;
+    max-width: 300px;
     overflow-y: scroll;
+    overflow-x: scroll;
+    border: 1px solid gray;
 }

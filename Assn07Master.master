@@ -10,7 +10,7 @@
 <body>
     <form id="formAssn07Master" runat="server">
         <div>
-            <div>
+            <div id="wrapper">
                 <link href="App_Theme/StyleSheet.css" rel="stylesheet" />
                 <h1>Evan and Jake's Report Generator!
             </h1>
