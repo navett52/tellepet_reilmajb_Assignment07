@@ -63,7 +63,7 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
 
         foreach (ListItem store in cblStores.Items)
         {
-            if (store.Enabled)
+            if (store.Selected)
             {
                 stores += store.Value + ", ";
             }
