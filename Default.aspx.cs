@@ -21,6 +21,7 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
              * Ref for below code: http://stackoverflow.com/questions/1143639/binding-multiple-fields-to-listbox-in-asp-net/
              * In all honesty not entirely sure how this works...
              * Is this kinda like a Lambda Function?
+             * Specifically looked for this though to keep formatting out of the data layer.
              */
             EnumerableRowCollection productData = from product in products
                              select new
