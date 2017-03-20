@@ -5,7 +5,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="cphBody" Runat="Server">
-    <div>
+    <div id="wrapper">
         <asp:Table ID="tContent" runat="server" Height="500px" Width="700px" >
             <asp:TableRow runat="server">
                 <asp:TableCell runat="server"><asp:Calendar ID="calStartDate" runat="server"></asp:Calendar></asp:TableCell>
@@ -17,7 +17,7 @@
             </asp:TableRow>
             <asp:TableRow runat="server">
                 <asp:TableCell runat="server">Pick the Product<br /><asp:DropDownList ID="ddProducts" runat="server"></asp:DropDownList></asp:TableCell>
-                <asp:TableCell runat="server">Pick the store(s)<br /><asp:CheckBoxList ID="cblStores" runat="server"></asp:CheckBoxList></asp:TableCell>
+                <asp:TableCell runat="server">Pick the store(s)<br /><div id="storeList"><asp:CheckBoxList ID="cblStores" runat="server"></asp:CheckBoxList></div></asp:TableCell>
             </asp:TableRow>
         </asp:Table>
         <asp:Button ID="btnGenerate" runat="server" Text="Generate" OnClick="btnGenerate_Click" />
