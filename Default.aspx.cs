@@ -1,4 +1,5 @@
 ﻿using ds_ProductsTableAdapters;
+using ds_StoreTableAdapters;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -33,6 +34,21 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
             ddProducts.DataTextField = "Name";
             ddProducts.DataValueField = "Id";
             ddProducts.DataBind();
+
+            tStoreTableAdapter storeTypeAdapter = new tStoreTableAdapter();
+            ds_Store.tStoreDataTable stores = storeTypeAdapter.GetData();
+
+            EnumerableRowCollection storeData = from store in stores
+                                                  select new
+                                                  {
+                                                      Name = store.Store,
+                                                      Id = store.StoreID
+                                                  };
+            cblStores.DataSource = storeData;
+            cblStores.DataTextField = "Name";
+            cblStores.DataValueField = "Id";
+            cblStores.DataBind();
+
         }
     }
 
