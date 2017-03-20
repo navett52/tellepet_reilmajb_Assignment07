@@ -15,8 +15,8 @@
                 <h1>Evan and Jake's Report Generator!
             </h1>
             </div>
-            <asp:ContentPlaceHolder ID="cphBody" runat="server" />
         </div>
+            <asp:ContentPlaceHolder ID="cphBody" runat="server" />       
     </form>
 </body>
 </html>
