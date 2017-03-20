@@ -6,7 +6,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="cphBody" Runat="Server">
     <div>
-        <asp:Table ID="Table1" runat="server" Height="500px" Width="700px" >
+        <asp:Table ID="tContent" runat="server" Height="500px" Width="700px" >
             <asp:TableRow runat="server">
                 <asp:TableCell runat="server"><asp:Calendar ID="calStartDate" runat="server"></asp:Calendar></asp:TableCell>
                 <asp:TableCell runat="server"><asp:Calendar ID="calEndDate" runat="server"></asp:Calendar></asp:TableCell>
