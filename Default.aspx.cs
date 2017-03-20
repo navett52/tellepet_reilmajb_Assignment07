@@ -49,18 +49,36 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
             cblStores.DataTextField = "Name";
             cblStores.DataValueField = "Id";
             cblStores.DataBind();
-
         }
     }
 
     protected void btnGenerate_Click(object sender, EventArgs e)
     {
+        string startDate = Convert.ToString(calStartDate.SelectedDate);
+        string endDate = Convert.ToString(calEndDate.SelectedDate);
+        string stores = "";
+        string productID = ddProducts.SelectedValue;
+        string minQty = txtMinQty.Text;
+        string maxQty = txtMaxQty.Text;
 
+        foreach (ListItem store in cblStores.Items)
+        {
+            if (store.Enabled)
+            {
+                stores += store.Value + ", ";
+            }
+        }
+        stores.Remove(stores.Length - 2, 2);
     }
 
-    protected string buildQuery(DateTime startDate, DateTime endDate, int minQty, int maxQty, List<string> stores)
+    protected string buildQuery(string startDate, string endDate, string minQty, string maxQty, string productID, string stores)
     {
-        string query = "";
+        string query = "SELECT SUM(tTransactionDetail.QtyOfProduct) AS Expr1 FROM tTransaction INNER JOIN tStore ON tTransaction.StoreID = tStore.StoreID INNER JOIN" + 
+            " tTransactionDetail ON tTransaction.TransactionID = tTransactionDetail.TransactionID INNER JOIN tProduct INNER JOIN tName ON tProduct.NameID = tName.NameID INNER JOIN" + 
+            " tManufacturer ON tProduct.ManufacturerID = tManufacturer.ManufacturerID ON tTransactionDetail.ProductID = tProduct.ProductID INNER JOIN tTransactionType ON" + 
+            " tTransaction.TransactionTypeID = tTransactionType.TransactionTypeID" + 
+            " WHERE(tTransaction.DateOfTransaction BETWEEN " + startDate + " AND" + endDate +" AND(tTransactionType.TransactionTypeID = 1) AND" + 
+            " (tStore.Store IN(" + stores + ")) AND (tProduct.ProductID = " + productID + ")";
 
         
 

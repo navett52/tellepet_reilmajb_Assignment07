@@ -1,15 +1,53 @@
-﻿<?xml version="1.0" encoding="utf-8" ?> 
-<xs:schema id="ds_Report" 
-                  targetNamespace="http://tempuri.org/ds_Report.xsd"
-                  elementFormDefault="qualified"
-                  attributeFormDefault="qualified"
-                  xmlns="http://tempuri.org/ds_Report.xsd"
-                  xmlns:mstns="http://tempuri.org/ds_Report.xsd"
-                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                  xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-	<xs:element name="ds_Report" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
-		<xs:complexType>
-			<xs:choice minOccurs="0" maxOccurs="unbounded"></xs:choice>
-		</xs:complexType>
-	</xs:element>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ds_Report" targetNamespace="http://tempuri.org/ds_Report.xsd" xmlns:mstns="http://tempuri.org/ds_Report.xsd" xmlns="http://tempuri.org/ds_Report.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="GroceryStoreSimulatorConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="GroceryStoreSimulatorConnectionString (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.GroceryStoreSimulatorConnectionString.ConnectionString" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="tProductTableAdapter" GeneratorDataComponentClassName="tProductTableAdapter" Name="tProduct" UserDataComponentName="tProductTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="GroceryStoreSimulatorConnectionString (Web.config)" DbObjectType="Unknown" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>SELECT        SUM(tTransactionDetail.QtyOfProduct) AS Expr1
+FROM            tTransaction INNER JOIN
+                         tStore ON tTransaction.StoreID = tStore.StoreID INNER JOIN
+                         tTransactionDetail ON tTransaction.TransactionID = tTransactionDetail.TransactionID INNER JOIN
+                         tProduct INNER JOIN
+                         tName ON tProduct.NameID = tName.NameID INNER JOIN
+                         tManufacturer ON tProduct.ManufacturerID = tManufacturer.ManufacturerID ON tTransactionDetail.ProductID = tProduct.ProductID INNER JOIN
+                         tTransactionType ON tTransaction.TransactionTypeID = tTransactionType.TransactionTypeID
+WHERE        (tTransaction.DateOfTransaction BETWEEN '01/01/2017' AND '12/31/2018') AND (tTransactionType.TransactionTypeID = 1) AND (tStore.Store IN ('001001', 'Amelia', 'Anderson', 'Ankorage')) AND 
+                         (tProduct.ProductID = 3)</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="Expr1" DataSetColumn="Expr1" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
+        </Tables>
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="ds_Report" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_DataSetName="ds_Report" msprop:Generator_UserDSName="ds_Report">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="tProduct" msprop:Generator_TableClassName="tProductDataTable" msprop:Generator_TableVarName="tabletProduct" msprop:Generator_TablePropName="tProduct" msprop:Generator_RowDeletingName="tProductRowDeleting" msprop:Generator_RowChangingName="tProductRowChanging" msprop:Generator_RowEvHandlerName="tProductRowChangeEventHandler" msprop:Generator_RowDeletedName="tProductRowDeleted" msprop:Generator_UserTableName="tProduct" msprop:Generator_RowChangedName="tProductRowChanged" msprop:Generator_RowEvArgName="tProductRowChangeEvent" msprop:Generator_RowClassName="tProductRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Expr1" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnExpr1" msprop:Generator_ColumnPropNameInRow="Expr1" msprop:Generator_ColumnPropNameInTable="Expr1Column" msprop:Generator_UserColumnName="Expr1" type="xs:int" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>
