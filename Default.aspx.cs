@@ -1,5 +1,6 @@
 ﻿using ds_ProductsTableAdapters;
 using ds_StoreTableAdapters;
+using ds_ReportTableAdapters;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -42,8 +43,8 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
             EnumerableRowCollection storeData = from store in stores
                                                   select new
                                                   {
-                                                      Name = store.Store,
-                                                      Id = store.StoreID
+                                                      Name = store.StoreString,
+                                                      Id = store.Store
                                                   };
             cblStores.DataSource = storeData;
             cblStores.DataTextField = "Name";
@@ -54,21 +55,30 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
 
     protected void btnGenerate_Click(object sender, EventArgs e)
     {
+        tReportTableAdapter reportTypeAdapter = new tReportTableAdapter();
+        string[] strings = null;
         string startDate = Convert.ToString(calStartDate.SelectedDate);
         string endDate = Convert.ToString(calEndDate.SelectedDate);
-        string stores = "";
-        string productID = ddProducts.SelectedValue;
+        int productID = Convert.ToInt32(ddProducts.SelectedValue);
         string minQty = txtMinQty.Text;
         string maxQty = txtMaxQty.Text;
+        DataRowCollection storeProductQuantities = reportTypeAdapter.GetData(startDate, endDate, productID, "").Rows;
+
 
         foreach (ListItem store in cblStores.Items)
         {
             if (store.Selected)
             {
-                stores += store.Value + ", ";
+                storeProductQuantities.Add(reportTypeAdapter.GetData(startDate, endDate, productID, store.Value).Rows);
             }
         }
-        stores.Remove(stores.Length - 2, 2);
+
+        storeProductQuantities.CopyTo(strings, 0);
+        
+        foreach (string storeqty in strings)
+        {
+            lblTest.Text += storeqty + " : ";
+        }
     }
 
     protected string buildQuery(string startDate, string endDate, string minQty, string maxQty, string productID, string stores)

@@ -60,5 +60,6 @@
         <div class="center">
             <asp:Button ID="btnGenerate" runat="server" Text="Generate" OnClick="btnGenerate_Click" BorderStyle="Solid" Height="50px" Width="115px" />
         </div>
+    <asp:Label ID="lblTest" runat="server" Text="Label"></asp:Label>
 </asp:Content>
 
