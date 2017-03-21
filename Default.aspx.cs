@@ -8,9 +8,13 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Data.SqlClient;
 
 public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
 {
+    private static System.Data.SqlClient.SqlConnection conn;
+    private static SqlCommand comm;
+    private static SqlDataReader reader;
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!IsPostBack)
@@ -25,11 +29,11 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
              * Specifically looked for this though to keep formatting out of the data layer.
              */
             EnumerableRowCollection productData = from product in products
-                             select new
-                             {
-                                 Name = product.Name + " - " + product.Description + " :by " + product.Manufacturer,
-                                 Id = product.ProductID
-                             };
+                                                  select new
+                                                  {
+                                                      Name = product.Name + " - " + product.Description + " :by " + product.Manufacturer,
+                                                      Id = product.ProductID
+                                                  };
             //end code I don't fully understand
             //The rest is just normal data binding.
             ddProducts.DataSource = productData;
@@ -38,18 +42,12 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
             ddProducts.DataBind();
 
             tStoreTableAdapter storeTypeAdapter = new tStoreTableAdapter();
-            ds_Store.tStoreDataTable stores = storeTypeAdapter.GetData();
-
-            EnumerableRowCollection storeData = from store in stores
-                                                  select new
-                                                  {
-                                                      Name = store.StoreString,
-                                                      Id = store.Store
-                                                  };
-            cblStores.DataSource = storeData;
-            cblStores.DataTextField = "Name";
-            cblStores.DataValueField = "Id";
+            ds_Store.tStoreDataTable storeDataTable = storeTypeAdapter.GetData();
+            cblStores.DataTextField = "Store";
+            cblStores.DataValueField = "StoreID";
+            cblStores.DataSource = storeDataTable;
             cblStores.DataBind();
+            cblStores.SelectedIndex = 0;
         }
     }
 
@@ -71,10 +69,10 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
             {
                 storeProductQuantities.Add(reportTypeAdapter.GetData(startDate, endDate, productID, store.Value).Rows);
             }
-        }
+        } 
 
         storeProductQuantities.CopyTo(strings, 0);
-        
+
         foreach (string storeqty in strings)
         {
             lblTest.Text += storeqty + " : ";
@@ -83,15 +81,46 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
 
     protected string buildQuery(string startDate, string endDate, string minQty, string maxQty, string productID, string stores)
     {
-        string query = "SELECT SUM(tTransactionDetail.QtyOfProduct) AS Expr1 FROM tTransaction INNER JOIN tStore ON tTransaction.StoreID = tStore.StoreID INNER JOIN" + 
-            " tTransactionDetail ON tTransaction.TransactionID = tTransactionDetail.TransactionID INNER JOIN tProduct INNER JOIN tName ON tProduct.NameID = tName.NameID INNER JOIN" + 
-            " tManufacturer ON tProduct.ManufacturerID = tManufacturer.ManufacturerID ON tTransactionDetail.ProductID = tProduct.ProductID INNER JOIN tTransactionType ON" + 
-            " tTransaction.TransactionTypeID = tTransactionType.TransactionTypeID" + 
-            " WHERE(tTransaction.DateOfTransaction BETWEEN " + startDate + " AND" + endDate +" AND(tTransactionType.TransactionTypeID = 1) AND" + 
+        string query = "SELECT SUM(tTransactionDetail.QtyOfProduct) AS Expr1 FROM tTransaction INNER JOIN tStore ON tTransaction.StoreID = tStore.StoreID INNER JOIN" +
+            " tTransactionDetail ON tTransaction.TransactionID = tTransactionDetail.TransactionID INNER JOIN tProduct INNER JOIN tName ON tProduct.NameID = tName.NameID INNER JOIN" +
+            " tManufacturer ON tProduct.ManufacturerID = tManufacturer.ManufacturerID ON tTransactionDetail.ProductID = tProduct.ProductID INNER JOIN tTransactionType ON" +
+            " tTransaction.TransactionTypeID = tTransactionType.TransactionTypeID" +
+            " WHERE(tTransaction.DateOfTransaction BETWEEN " + startDate + " AND" + endDate + " AND(tTransactionType.TransactionTypeID = 1) AND" +
             " (tStore.Store IN(" + stores + ")) AND (tProduct.ProductID = " + productID + ")";
-
-        
-
         return query;
+    }
+
+    private void OpenConnection()
+    {
+        System.Configuration.ConnectionStringSettings strConn;
+        strConn = ReadConnectionString();
+        // Console.WriteLine(strConn.ConnectionString);
+
+        conn = new System.Data.SqlClient.SqlConnection(strConn.ConnectionString);
+
+        // This could go wrong in so many ways...
+        try
+        {
+            conn.Open();
+        }
+        catch (Exception ex)
+        {
+            // Miserable error handling...
+            Response.Write(ex.Message);
+        }
+    }
+    private System.Configuration.ConnectionStringSettings ReadConnectionString()
+    {
+        String strPath;
+        strPath = HttpContext.Current.Request.ApplicationPath + "/web.config";
+        System.Configuration.Configuration rootWebConfig =
+            System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration(strPath);
+
+        System.Configuration.ConnectionStringSettings connString = null;
+        if (rootWebConfig.ConnectionStrings.ConnectionStrings.Count > 0)
+        {
+            connString = rootWebConfig.ConnectionStrings.ConnectionStrings["GroceryStoreSimulatorConnectionString"];
+        }
+        return connString;
     }
 }
