@@ -53,40 +53,36 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
 
     protected void btnGenerate_Click(object sender, EventArgs e)
     {
-        tReportTableAdapter reportTypeAdapter = new tReportTableAdapter();
-        string[] strings = null;
         string startDate = Convert.ToString(calStartDate.SelectedDate);
         string endDate = Convert.ToString(calEndDate.SelectedDate);
-        int productID = Convert.ToInt32(ddProducts.SelectedValue);
+        string productID = ddProducts.SelectedValue;
         string minQty = txtMinQty.Text;
         string maxQty = txtMaxQty.Text;
-        DataRowCollection storeProductQuantities = reportTypeAdapter.GetData(startDate, endDate, productID, "").Rows;
 
+        string query = buildQuery(startDate, endDate, productID);
+        List<string> reportData = new List<string>();
 
-        foreach (ListItem store in cblStores.Items)
+        comm = new SqlCommand(query, conn);
+        try { reader.Close(); } catch (Exception ex) { }
+        reader = comm.ExecuteReader();
+
+        while (reader.Read())
         {
-            if (store.Selected)
+            if (reader.GetInt32(2) >= Convert.ToInt32(txtMinQty.Text) && reader.GetInt32(2) <= Convert.ToInt32(txtMaxQty.Text))
             {
-                storeProductQuantities.Add(reportTypeAdapter.GetData(startDate, endDate, productID, store.Value).Rows);
+                reportData.Add(reader.GetString(0) + "~" + reader.GetString(1) + "~" + ddProducts.SelectedItem + "~" + reader.GetInt32(2));
             }
-        } 
-
-        storeProductQuantities.CopyTo(strings, 0);
-
-        foreach (string storeqty in strings)
-        {
-            lblTest.Text += storeqty + " : ";
         }
     }
 
-    protected string buildQuery(string startDate, string endDate, string minQty, string maxQty, string productID, string stores)
+    protected string buildQuery(string startDate, string endDate, string productID)
     {
-        string query = "SELECT SUM(tTransactionDetail.QtyOfProduct) AS Expr1 FROM tTransaction INNER JOIN tStore ON tTransaction.StoreID = tStore.StoreID INNER JOIN" +
+        string query = "SELECT tStore.Store, tStore.Address1, SUM(tTransactionDetail.QtyOfProduct) AS ProductQty FROM tTransaction INNER JOIN tStore ON tTransaction.StoreID = tStore.StoreID INNER JOIN" +
             " tTransactionDetail ON tTransaction.TransactionID = tTransactionDetail.TransactionID INNER JOIN tProduct INNER JOIN tName ON tProduct.NameID = tName.NameID INNER JOIN" +
             " tManufacturer ON tProduct.ManufacturerID = tManufacturer.ManufacturerID ON tTransactionDetail.ProductID = tProduct.ProductID INNER JOIN tTransactionType ON" +
             " tTransaction.TransactionTypeID = tTransactionType.TransactionTypeID" +
-            " WHERE(tTransaction.DateOfTransaction BETWEEN " + startDate + " AND" + endDate + " AND(tTransactionType.TransactionTypeID = 1) AND" +
-            " (tStore.Store IN(" + stores + ")) AND (tProduct.ProductID = " + productID + ")";
+            " WHERE(tTransaction.DateOfTransaction BETWEEN " + startDate + " AND" + endDate + " AND (tTransactionType.TransactionTypeID = 1) AND" +
+            " (tProduct.ProductID = " + productID + ") GROUP BY tStore.Store, tStore.Address1";
         return query;
     }
 
