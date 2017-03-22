@@ -59,11 +59,19 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
         string productID = ddProducts.SelectedValue;
         string minQty = txtMinQty.Text;
         string maxQty = txtMaxQty.Text;
-
         string query = buildQuery(startDate, endDate, productID);
         List<List<string>> reportData = new List<List<string>>();
         List<string> reportCell = new List<string>();
+        List<string> storesSelected = new List<string>();
 
+        for (int i = 0; i < cblStores.Items.Count; i++)
+        {
+            if (cblStores.Items[i].Selected == true)
+            {
+                storesSelected.Add(cblStores.Items[i].Text);
+            }
+
+        }
         comm = new SqlCommand(query, conn);
         try { reader.Close(); } catch (Exception ex) { }
         reader = comm.ExecuteReader();

@@ -4,6 +4,9 @@
     <link href="App_Theme/ReportStyles.css" rel="stylesheet" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="cphBody" Runat="Server">
+    <link href="App_Theme/Report.css" rel="stylesheet" />
+    <div id="wrapper">
     <asp:Literal ID="litReport" runat="server"></asp:Literal>
+    </div>
 </asp:Content>
 
