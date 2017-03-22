@@ -1,6 +1,14 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Assn07Master.master" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="tellepet_reilmajb_Assignment07_Default" %>
+﻿<%--
+    Evan Tellep and Jake Reilman
+    Prof. Bill Nicholson
+    ASP.NET
+    Assignment 07
+    3/22/17
+    Assn Desc: Creating web form to generate reports
+    Ref:  
+--%>
 
-
+<%@ Page Title="" Language="C#" MasterPageFile="~/Assn07Master.master" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="tellepet_reilmajb_Assignment07_Default" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 </asp:Content>

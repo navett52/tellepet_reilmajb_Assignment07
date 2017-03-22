@@ -1,4 +1,16 @@
-﻿using ds_ProductsTableAdapters;
+﻿/*
+<%--
+    Evan Tellep and Jake Reilman
+    Prof. Bill Nicholson
+    ASP.NET
+    Assignment 07
+    3/22/17
+    Assn Desc: Creating web form to generate reports
+    Ref: http://stackoverflow.com/questions/1143639/binding-multiple-fields-to-listbox-in-asp-net/
+--%>
+*/
+
+using ds_ProductsTableAdapters;
 using ds_StoreTableAdapters;
 using ds_ReportTableAdapters;
 using System;
@@ -12,9 +24,16 @@ using System.Data.SqlClient;
 
 public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
 {
+    //Static db variables to use when the db needs to be used
     private static System.Data.SqlClient.SqlConnection conn;
     private static SqlCommand comm;
     private static SqlDataReader reader;
+
+    /// <summary>
+    /// Populate the dropdown and checkboxlist with appropriately formatted data
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!IsPostBack)
@@ -42,6 +61,7 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
             ddProducts.DataValueField = "Id";
             ddProducts.DataBind();
 
+            //Use dataset to populate check box list
             tStoreTableAdapter storeTypeAdapter = new tStoreTableAdapter();
             ds_Store.tStoreDataTable storeDataTable = storeTypeAdapter.GetData();
             cblStores.DataTextField = "Store";
@@ -52,17 +72,24 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
         }
     }
 
+    /// <summary>
+    /// Grab selected info and populate the query string with it, then execute
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     protected void btnGenerate_Click(object sender, EventArgs e)
     {
+        //Variables used to house selected data
         string startDate = Convert.ToString(calStartDate.SelectedDate);
         string endDate = Convert.ToString(calEndDate.SelectedDate);
         string productID = ddProducts.SelectedValue;
         string minQty = txtMinQty.Text;
-        string maxQty = txtMaxQty.Text;        
-        List<List<string>> reportData = new List<List<string>>();
-        List<string> reportCell = new List<string>();
+        string maxQty = txtMaxQty.Text;
         string storesSelected = "";
-
+        //Variables instantiated to transfer data to next page
+        List<List<string>> reportData = new List<List<string>>();
+        
+        //Check to see what stores are selected in the checkboxlist and add them to a string to be entered into the query
         for (int i = 0; i < cblStores.Items.Count; i++)
         {
             if (cblStores.Items[i].Selected == true)
@@ -71,11 +98,14 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
             }
             storesSelected.Remove(storesSelected.Length - 1, 2);
         }
+        //Build query
         string query = buildQuery(startDate, endDate, productID, storesSelected);
+        //run query
         comm = new SqlCommand(query, conn);
         try { reader.Close(); } catch (Exception ex) { }
         reader = comm.ExecuteReader();
 
+        //While reader has rows to read populate the reportData with returned data
         while (reader.Read())
         {
             if (reader.GetInt32(2) >= Convert.ToInt32(txtMinQty.Text) && reader.GetInt32(2) <= Convert.ToInt32(txtMaxQty.Text))
@@ -83,21 +113,32 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
                 reportData.Add(new List<string>() { reader.GetString(0), reader.GetString(1), ddProducts.SelectedItem.Text, Convert.ToString(reader.GetInt32(2)) });
             }
         }
+        //Set reportData as a session variable and redirect to report page
         Session["Data"] = reportData;
         Response.Redirect("Report.aspx");
     }
 
+    /// <summary>
+    /// Build the query string based off of selected information
+    /// </summary>
+    /// <param name="startDate"></param>
+    /// <param name="endDate"></param>
+    /// <param name="productID"></param>
+    /// <param name="storesSelected"></param>
+    /// <returns></returns>
     protected string buildQuery(string startDate, string endDate, string productID, string storesSelected)
     {
-        string query = "SELECT tStoreID, tStore.Store, tStore.Address1, SUM(tTransactionDetail.QtyOfProduct) AS ProductQty FROM tTransaction INNER JOIN tStore ON tTransaction.StoreID = tStore.StoreID INNER JOIN" +
+        return "SELECT tStoreID, tStore.Store, tStore.Address1, SUM(tTransactionDetail.QtyOfProduct) AS ProductQty FROM tTransaction INNER JOIN tStore ON tTransaction.StoreID = tStore.StoreID INNER JOIN" +
             " tTransactionDetail ON tTransaction.TransactionID = tTransactionDetail.TransactionID INNER JOIN tProduct INNER JOIN tName ON tProduct.NameID = tName.NameID INNER JOIN" +
             " tManufacturer ON tProduct.ManufacturerID = tManufacturer.ManufacturerID ON tTransactionDetail.ProductID = tProduct.ProductID INNER JOIN tTransactionType ON" +
             " tTransaction.TransactionTypeID = tTransactionType.TransactionTypeID" +
             " WHERE(tTransaction.DateOfTransaction BETWEEN '" + startDate + "' AND '" + endDate + "') AND (tTransactionType.TransactionTypeID = 1) AND" +
             " (tProduct.ProductID = " + productID + ") GROUP BY tStore.Store, tStore.Address1 AND (tStore.StoreID = " + storesSelected + ")";
-        return query;
     }
 
+    /// <summary>
+    /// An ADO.NET method given to us by Bill cause he's awesome
+    /// </summary>
     private void OpenConnection()
     {
         System.Configuration.ConnectionStringSettings strConn;
@@ -117,6 +158,11 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
             Response.Write(ex.Message);
         }
     }
+
+    /// <summary>
+    /// Another ADO.NET method given to us by Bill cause he's awesome
+    /// </summary>
+    /// <returns></returns>
     private System.Configuration.ConnectionStringSettings ReadConnectionString()
     {
         String strPath;
