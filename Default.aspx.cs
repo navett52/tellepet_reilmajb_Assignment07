@@ -64,7 +64,7 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
             //Use dataset to populate check box list
             tStoreTableAdapter storeTypeAdapter = new tStoreTableAdapter();
             ds_Store.tStoreDataTable storeDataTable = storeTypeAdapter.GetData();
-            cblStores.DataTextField = "Store";
+            cblStores.DataTextField = "StoreString";
             cblStores.DataValueField = "StoreID";
             cblStores.DataSource = storeDataTable;
             cblStores.DataBind();
