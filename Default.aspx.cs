@@ -94,10 +94,10 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
         {
             if (cblStores.Items[i].Selected == true)
             {
-                storesSelected += cblStores.Items[i].Text + " OR";
+                storesSelected += cblStores.Items[i].Value + " OR tStore.StoreID = ";
             }
-            storesSelected.Remove(storesSelected.Length - 1, 2);
         }
+        storesSelected = storesSelected.Remove(storesSelected.Length - 20, 20);
         //Build query
         string query = buildQuery(startDate, endDate, productID, storesSelected);
         //run query
@@ -128,12 +128,12 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
     /// <returns></returns>
     protected string buildQuery(string startDate, string endDate, string productID, string storesSelected)
     {
-        return "SELECT tStoreID, tStore.Store, tStore.Address1, SUM(tTransactionDetail.QtyOfProduct) AS ProductQty FROM tTransaction INNER JOIN tStore ON tTransaction.StoreID = tStore.StoreID INNER JOIN" +
+        return "SELECT tStore.Store, tStore.Address1, SUM(tTransactionDetail.QtyOfProduct) AS ProductQty FROM tTransaction INNER JOIN tStore ON tTransaction.StoreID = tStore.StoreID INNER JOIN" +
             " tTransactionDetail ON tTransaction.TransactionID = tTransactionDetail.TransactionID INNER JOIN tProduct INNER JOIN tName ON tProduct.NameID = tName.NameID INNER JOIN" +
             " tManufacturer ON tProduct.ManufacturerID = tManufacturer.ManufacturerID ON tTransactionDetail.ProductID = tProduct.ProductID INNER JOIN tTransactionType ON" +
             " tTransaction.TransactionTypeID = tTransactionType.TransactionTypeID" +
             " WHERE(tTransaction.DateOfTransaction BETWEEN '" + startDate + "' AND '" + endDate + "') AND (tTransactionType.TransactionTypeID = 1) AND" +
-            " (tProduct.ProductID = " + productID + ") GROUP BY tStore.Store, tStore.Address1 AND (tStore.StoreID = " + storesSelected + ")";
+            " (tProduct.ProductID = " + productID + ") AND (tStore.StoreID = " + storesSelected + ") GROUP BY tStore.Store, tStore.Address1";
     }
 
     /// <summary>
