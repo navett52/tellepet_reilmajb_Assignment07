@@ -83,7 +83,7 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
             " tTransactionDetail ON tTransaction.TransactionID = tTransactionDetail.TransactionID INNER JOIN tProduct INNER JOIN tName ON tProduct.NameID = tName.NameID INNER JOIN" +
             " tManufacturer ON tProduct.ManufacturerID = tManufacturer.ManufacturerID ON tTransactionDetail.ProductID = tProduct.ProductID INNER JOIN tTransactionType ON" +
             " tTransaction.TransactionTypeID = tTransactionType.TransactionTypeID" +
-            " WHERE(tTransaction.DateOfTransaction BETWEEN " + startDate + " AND" + endDate + " AND (tTransactionType.TransactionTypeID = 1) AND" +
+            " WHERE(tTransaction.DateOfTransaction BETWEEN '" + startDate + "' AND '" + endDate + "') AND (tTransactionType.TransactionTypeID = 1) AND" +
             " (tProduct.ProductID = " + productID + ") GROUP BY tStore.Store, tStore.Address1";
         return query;
     }
