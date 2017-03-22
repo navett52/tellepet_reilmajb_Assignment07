@@ -23,7 +23,7 @@ public partial class Report : System.Web.UI.Page
             int i = 1;
             foreach (List<string> data in reportData)
             {
-                litReport.Text += "<div class=\"reportCell\" style=\"\""; //Open reportCell
+                litReport.Text += "<div class=\"reportCell\""; //Open reportCell
                 litReport.Text += "<h1>Store" + i + "</h1>";
                 litReport.Text += "<div class=\"store\">" + data[0] + "</div>";
                 litReport.Text += "<div class=\"address\">" + data[1] + "</div>";
