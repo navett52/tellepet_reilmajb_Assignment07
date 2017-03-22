@@ -76,6 +76,7 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
             }
         }
         Session["Data"] = reportData;
+        Response.Redirect("Report.aspx");
     }
 
     protected string buildQuery(string startDate, string endDate, string productID)
