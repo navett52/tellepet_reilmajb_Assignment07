@@ -19,6 +19,7 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
+            OpenConnection();
             //Populating the Product dropdown.
             tProductTableAdapter productTypeAdapter = new tProductTableAdapter();
             ds_Products.tProductDataTable products = productTypeAdapter.GetData();
@@ -73,6 +74,7 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
                 reportData.Add(reader.GetString(0) + "~" + reader.GetString(1) + "~" + ddProducts.SelectedItem + "~" + reader.GetInt32(2));
             }
         }
+        Session["Data"] = reportData;
     }
 
     protected string buildQuery(string startDate, string endDate, string productID)
