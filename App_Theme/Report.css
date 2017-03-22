@@ -1,11 +1,6 @@
-﻿body {
-    text-align:center;
-}
-
-h1 { 
-    width: 80%;
-}
-
-.reportCell {
+﻿.reportCell {
     border-top: 1px solid black;
+    width: 50%;
+    text-align: center;
+    margin: auto;
 }
