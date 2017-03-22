@@ -58,20 +58,20 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
         string endDate = Convert.ToString(calEndDate.SelectedDate);
         string productID = ddProducts.SelectedValue;
         string minQty = txtMinQty.Text;
-        string maxQty = txtMaxQty.Text;
-        string query = buildQuery(startDate, endDate, productID);
+        string maxQty = txtMaxQty.Text;        
         List<List<string>> reportData = new List<List<string>>();
         List<string> reportCell = new List<string>();
-        List<string> storesSelected = new List<string>();
+        string storesSelected = "";
 
         for (int i = 0; i < cblStores.Items.Count; i++)
         {
             if (cblStores.Items[i].Selected == true)
             {
-                storesSelected.Add(cblStores.Items[i].Text);
+                storesSelected += cblStores.Items[i].Text + " OR";
             }
-
+            storesSelected.Remove(storesSelected.Length - 1, 2);
         }
+        string query = buildQuery(startDate, endDate, productID, storesSelected);
         comm = new SqlCommand(query, conn);
         try { reader.Close(); } catch (Exception ex) { }
         reader = comm.ExecuteReader();
@@ -87,14 +87,14 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
         Response.Redirect("Report.aspx");
     }
 
-    protected string buildQuery(string startDate, string endDate, string productID)
+    protected string buildQuery(string startDate, string endDate, string productID, string storesSelected)
     {
-        string query = "SELECT tStore.Store, tStore.Address1, SUM(tTransactionDetail.QtyOfProduct) AS ProductQty FROM tTransaction INNER JOIN tStore ON tTransaction.StoreID = tStore.StoreID INNER JOIN" +
+        string query = "SELECT tStoreID, tStore.Store, tStore.Address1, SUM(tTransactionDetail.QtyOfProduct) AS ProductQty FROM tTransaction INNER JOIN tStore ON tTransaction.StoreID = tStore.StoreID INNER JOIN" +
             " tTransactionDetail ON tTransaction.TransactionID = tTransactionDetail.TransactionID INNER JOIN tProduct INNER JOIN tName ON tProduct.NameID = tName.NameID INNER JOIN" +
             " tManufacturer ON tProduct.ManufacturerID = tManufacturer.ManufacturerID ON tTransactionDetail.ProductID = tProduct.ProductID INNER JOIN tTransactionType ON" +
             " tTransaction.TransactionTypeID = tTransactionType.TransactionTypeID" +
             " WHERE(tTransaction.DateOfTransaction BETWEEN '" + startDate + "' AND '" + endDate + "') AND (tTransactionType.TransactionTypeID = 1) AND" +
-            " (tProduct.ProductID = " + productID + ") GROUP BY tStore.Store, tStore.Address1";
+            " (tProduct.ProductID = " + productID + ") GROUP BY tStore.Store, tStore.Address1 AND (tStore.StoreID = " + storesSelected + ")";
         return query;
     }
 
