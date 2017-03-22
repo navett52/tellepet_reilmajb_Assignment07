@@ -25,10 +25,10 @@ public partial class Report : System.Web.UI.Page
             {
                 litReport.Text += "<div class=\"reportCell\""; //Open reportCell
                 litReport.Text += "<h1>Store" + i + "</h1>";
-                litReport.Text += "<div class=\"store\">" + data[0] + "</div>";
-                litReport.Text += "<div class=\"address\">" + data[1] + "</div>";
-                litReport.Text += "<div class=\"product\">" + data[2] + "</div>";
-                litReport.Text += "<div class=\"qty\">" + data[3] + "</div>";
+                litReport.Text += "<div class=\"store\">Store: " + data[0] + "</div>";
+                litReport.Text += "<div class=\"address\">Address: " + data[1] + "</div>";
+                litReport.Text += "<div class=\"product\">Product Info: " + data[2] + "</div>";
+                litReport.Text += "<div class=\"qty\">Quantity of Product Sold over Date Range: " + data[3] + "</div>";
                 litReport.Text += "</div>"; //Close reportCell
                 i++;
             }
