@@ -5,3 +5,7 @@
 h1 { 
     width: 80%;
 }
+
+.reportCell {
+    border-top: 1px solid black;
+}
