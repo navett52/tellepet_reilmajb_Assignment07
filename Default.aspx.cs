@@ -61,7 +61,8 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
         string maxQty = txtMaxQty.Text;
 
         string query = buildQuery(startDate, endDate, productID);
-        List<string> reportData = new List<string>();
+        List<List<string>> reportData = new List<List<string>>();
+        List<string> reportCell = new List<string>();
 
         comm = new SqlCommand(query, conn);
         try { reader.Close(); } catch (Exception ex) { }
@@ -71,7 +72,7 @@ public partial class tellepet_reilmajb_Assignment07_Default : System.Web.UI.Page
         {
             if (reader.GetInt32(2) >= Convert.ToInt32(txtMinQty.Text) && reader.GetInt32(2) <= Convert.ToInt32(txtMaxQty.Text))
             {
-                reportData.Add(reader.GetString(0) + "~" + reader.GetString(1) + "~" + ddProducts.SelectedItem + "~" + reader.GetInt32(2));
+                reportData.Add(new List<string>() { reader.GetString(0), reader.GetString(1), ddProducts.SelectedItem.Text, Convert.ToString(reader.GetInt32(2)) });
             }
         }
         Session["Data"] = reportData;
